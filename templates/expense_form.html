@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+
+{% block content %}
+
+<h1>{{ title }}</h1>
+
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+
+    <div class="card">
+
+        <label>
+            Amount
+        </label>
+
+        {{ form.amount }}
+
+        {{ form.amount.errors }}
+
+    </div>
+
+
+    <div class="card">
+
+        <label>
+            Description
+        </label>
+
+        {{ form.description }}
+
+        {{ form.description.errors }}
+
+    </div>
+
+    <div class="card">
+
+        <label>
+            Category
+        </label>
+
+        {{ form.category }}
+
+        {{ form.category.errors }}
+
+    </div>
+
+
+
+    <div class="card">
+
+        <label>
+            Date
+        </label>
+
+        {{ form.expense_date }}
+
+        {{ form.expense_date.errors }}
+
+    </div>
+
+
+    <button
+        type="submit"
+        class="button"
+    >
+        Save Expense
+    </button>
+
+</form>
+
+{% endblock %}

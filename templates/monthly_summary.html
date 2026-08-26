@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Monthly Summary
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Monthly Summary</h1>
+
+
+<form method="GET">
+
+    <div class="card">
+
+        <label>
+            Select month
+        </label>
+
+        <input
+            type="month"
+            name="month"
+            value="{{ selected_month }}"
+            class="input"
+        >
+
+        <br>
+
+        <button
+            type="submit"
+            class="button"
+        >
+            View Month
+        </button>
+
+    </div>
+
+</form>
+
+
+<div class="card">
+
+    <h3>
+        Total for
+        {{ year }}-{{ month|stringformat:"02d" }}
+    </h3>
+
+    <h1>
+        {{ total|floatformat:2 }} ETB
+    </h1>
+
+    <div class="card">
+
+    <h3>
+        Spending by Category
+    </h3>
+
+
+    {% for category in category_totals %}
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            padding:10px 0;
+            border-bottom:1px solid #ddd;
+        ">
+
+            <span>
+
+                {% if category.category == "food" %}
+                    🍔 Food
+
+                {% elif category.category == "transport" %}
+                    🚕 Transport
+
+                {% elif category.category == "housing" %}
+                    🏠 Housing
+
+                {% elif category.category == "utilities" %}
+                    💡 Utilities
+
+                {% elif category.category == "shopping" %}
+                    🛒 Shopping
+
+                {% elif category.category == "health" %}
+                    💊 Health
+
+                {% elif category.category == "education" %}
+                    🎓 Education
+
+                {% elif category.category == "entertainment" %}
+                    🎉 Entertainment
+
+                {% else %}
+                    📦 Other
+
+                {% endif %}
+
+            </span>
+
+
+            <strong>
+                {{ category.total|floatformat:2 }} ETB
+            </strong>
+
+        </div>
+
+    {% empty %}
+
+        <p>
+            No expenses recorded.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+</div>
+
+
+{% for expense in expenses %}
+
+<div class="card">
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+    ">
+
+        <div>
+
+            <strong>
+                {{ expense.description }}
+            </strong>
+
+            <p>
+                {{ expense.expense_date|date:"d M Y" }}
+            </p>
+
+        </div>
+
+
+        <strong>
+            {{ expense.amount|floatformat:2 }} ETB
+        </strong>
+
+    </div>
+
+
+    <div style="
+        display:flex;
+        gap:15px;
+    ">
+
+        <a
+            href="{% url 'edit_expense' expense.id %}"
+        >
+            Edit
+        </a>
+
+        <a
+            href="{% url 'delete_expense' expense.id %}"
+        >
+            Delete
+        </a>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<div class="card">
+
+    <p>
+        No expenses recorded for this month.
+    </p>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

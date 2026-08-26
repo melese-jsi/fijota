@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}
+    My Expenses
+{% endblock %}
+
+
+{% block content %}
+
+<h1>My Expenses</h1>
+
+
+<a
+    href="{% url 'add_expense' %}"
+    class="button"
+    style="
+        text-decoration:none;
+        text-align:center;
+        margin-bottom:20px;
+    "
+>
+    + Add Expense
+</a>
+
+
+{% for expense in expenses %}
+
+<div class="card">
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    ">
+
+        <div>
+
+            <strong>
+                {{ expense.description }}
+            </strong>
+
+             <p>
+                {{ expense.get_category_display }}
+            </p>
+
+            <p>
+                {{ expense.expense_date |date:"d M Y" }}
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <strong>
+                {{ expense.amount }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div style="
+        display:flex;
+        gap:10px;
+        margin-top:10px;
+    ">
+
+        <a
+            href="{% url 'edit_expense' expense.id %}"
+            style="text-decoration:none;"
+        >
+            Edit
+        </a>
+
+
+        <a
+            href="{% url 'delete_expense' expense.id %}"
+            style="text-decoration:none;"
+        >
+            Delete
+        </a>
+
+    </div>
+
+</div>
+
+
+{% empty %}
+
+<div class="card">
+
+    <p>
+        You haven't recorded any expenses yet.
+    </p>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

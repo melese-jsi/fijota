@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>
+        Expense Tracker
+    </title>
+
+</head>
+
+
+<body>
+
+<div class="loading-screen">
+
+    <div class="loading-spinner"></div>
+
+    <h3>
+        Authenticating...
+    </h3>
+
+    <p>
+        Please wait
+    </p>
+
+</div>
+
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<script src="{% static 'js/telegram_auth.js' %}"></script>
+
+</body>
+
+</html>

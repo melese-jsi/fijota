@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+
+{% block title %}
+Reports
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-container">
+
+    <div class="page-header">
+
+        <h1>Reports</h1>
+
+        <p>
+            Your spending overview
+        </p>
+
+    </div>
+
+
+    <!-- DATE FILTER -->
+
+    <div class="report-filter">
+
+        <div class="quick-filters">
+
+        <a
+            href="?period=today"
+            class="quick-filter {% if period == 'today' %}active{% endif %}"
+        >
+            Today
+        </a>
+
+        <a
+            href="?period=week"
+            class="quick-filter {% if period == 'week' %}active{% endif %}"
+        >
+            This Week
+        </a>
+
+           <a
+            href="?period=month"
+            class="quick-filter {% if period == 'month' %}active{% endif %}"
+        >
+            This Month
+        </a>
+
+        <!-- <button
+            type="button"
+            class="quick-filter"
+            id="customPeriodButton"
+        >
+            Custom
+        </button> -->
+        </div>
+
+
+        <form method="GET">
+
+            <div class="filter-row">
+
+                <div class="filter-field">
+
+                    <label>
+                        From
+                    </label>
+
+                    <input
+                        type="date"
+                        name="start_date"
+                        value="{{ start_date|date:'Y-m-d' }}"
+                    >
+
+                </div>
+
+
+                <div class="filter-field">
+
+                    <label>
+                        To
+                    </label>
+
+                    <input
+                        type="date"
+                        name="end_date"
+                        value="{{ end_date|date:'Y-m-d' }}"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Apply
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+
+            <span>
+                Total spending
+            </span>
+
+            <strong>
+                {{ total|floatformat:2 }}
+                ETB
+            </strong>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <span>
+                Transactions
+            </span>
+
+            <strong>
+                {{ transaction_count }}
+            </strong>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <span>
+                Average expense
+            </span>
+
+            <strong>
+                {{ average_expense|floatformat:2 }}
+                ETB
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- DAILY SPENDING -->
+
+    <div class="report-card">
+
+        <h2>
+            Daily spending
+        </h2>
+
+        <div class="chart-container">
+
+            <canvas
+                id="dailySpendingChart"
+            ></canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- CATEGORY SPENDING -->
+
+    <div class="report-card">
+
+        <h2>
+            Spending by category
+        </h2>
+
+
+        {% if category_spending %}
+
+            <div class="category-list">
+
+                {% for item in category_spending %}
+
+                    <div class="category-row">
+
+                        <div>
+
+                            <strong>
+                                {{ item.category_name }}
+                            </strong>
+
+                            <small>
+                                {{ item.count }}
+                                transaction{{ item.count|pluralize }}
+                            </small>
+
+                        </div>
+
+
+                        <strong>
+
+                            {{ item.total|floatformat:2 }}
+                            ETB
+
+                        </strong>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <p>
+                No expenses found for this period.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+
+const labels =
+    {{ daily_labels|safe }};
+
+const values =
+    {{ daily_values|safe }};
+
+
+const canvas =
+    document.getElementById(
+        "dailySpendingChart"
+    );
+
+
+if (canvas) {
+
+    new Chart(
+        canvas,
+        {
+
+            type: "line",
+
+            data: {
+
+                labels: labels,
+
+                datasets: [
+
+                    {
+
+                        label:
+                            "Daily spending",
+
+                        data: values,
+
+                        tension: 0.3,
+
+                        fill: true
+
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        display: false
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+                        beginAtZero: true
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+</script>
+
+{% endblock %}

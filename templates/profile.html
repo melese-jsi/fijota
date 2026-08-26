@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    Profile
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Profile</h1>
+
+
+<div class="card">
+
+    <p>
+        <strong>First name</strong>
+    </p>
+
+    <p>
+        {{ user.first_name }}
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <p>
+        <strong>Last name</strong>
+    </p>
+
+    <p>
+        {{ user.last_name|default:"Not provided" }}
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <p>
+        <strong>Telegram username</strong>
+    </p>
+
+    <p>
+        {% if user.username %}
+            @{{ user.username }}
+        {% else %}
+            Not provided
+        {% endif %}
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <p>
+        <strong>Telegram ID</strong>
+    </p>
+
+    <p>
+        {{ user.telegram_id }}
+    </p>
+
+</div>
+
+
+{% endblock %}

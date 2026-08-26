@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+
+{% block content %}
+
+<div class="profile-header">
+
+    {% if user.photo_url %}
+
+        <img
+            src="{{ user.photo_url }}"
+            class="profile-image"
+        >
+
+    {% else %}
+
+        <div style="font-size:60px;">
+            👤
+        </div>
+
+    {% endif %}
+
+
+    <h2>
+        Hello {{ user.first_name }}
+    </h2>
+
+    {% if user.last_name %}
+        <p>{{ user.last_name }}</p>
+    {% endif %}
+
+</div>
+
+
+<div class="card">
+
+    <h3>Welcome 👋</h3>
+
+    <p>
+        You are successfully authenticated
+        through Telegram.
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <p>
+        <strong>Telegram ID</strong>
+    </p>
+
+    <p>
+        {{ user.telegram_id }}
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <p>
+        <strong>Username</strong>
+    </p>
+
+    <p>
+        {% if user.username %}
+            @{{ user.username }}
+        {% else %}
+            No username
+        {% endif %}
+    </p>
+
+</div>
+
+<div class="card">
+
+    <p>
+        Today's spending
+    </p>
+
+    <h1>
+        {{ daily_total|floatformat:2 }} ETB
+    </h1>
+
+    <a href="{% url 'daily_summary' %}">
+        View today's expenses
+    </a>
+
+</div>
+
+
+<div class="card">
+
+    <p>
+        This month's spending
+    </p>
+
+    <h1>
+        {{ monthly_total|floatformat:2 }} ETB
+    </h1>
+
+    <a href="{% url 'monthly_summary' %}">
+        View monthly expenses
+    </a>
+
+</div>
+
+<a
+    href="{% url 'add_expense' %}"
+    class="button"
+    style="
+        text-decoration:none;
+        text-align:center;
+        margin-bottom:20px;
+    "
+>
+    + Add Expense
+</a>
+
+
+<h2>
+    Recent Expenses
+</h2>
+
+
+{% for expense in recent_expenses %}
+
+<div class="card">
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+    ">
+
+        <div>
+
+            <strong>
+                {{ expense.description }}
+            </strong>
+
+            <p>
+                {{ expense.expense_date|date:"d M Y" }}
+            </p>
+
+        </div>
+
+
+        <strong>
+            {{ expense.amount|floatformat:2 }} ETB
+        </strong>
+
+    </div>
+
+</div>
+
+
+{% empty %}
+
+<div class="card">
+
+    <p>
+        No expenses yet.
+    </p>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

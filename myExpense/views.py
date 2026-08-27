@@ -6,6 +6,7 @@ from django.http import JsonResponse, request
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 from myExpense.models import Expense, User
 from myExpense.forms import ExpenseForm
@@ -29,7 +30,7 @@ def telegram_auth_page(request):
 
 def home(request):
     return render(request, "home.html")
-
+@csrf_exempt
 def telegram_login(request):
     
     if request.method != "POST":

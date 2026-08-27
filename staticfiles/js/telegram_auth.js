@@ -7,7 +7,6 @@
 
             tg.expand();
 
-
             const initData = tg.initData;
 
             if (!initData) {
